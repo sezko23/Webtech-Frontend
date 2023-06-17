@@ -8,6 +8,7 @@ const Dashboard = () => {
     const [files, setFiles] = useState([]);
     const [fileToUpdate, setFileToUpdate] = useState(null);
     const [newFilename, setNewFilename] = useState('');
+    const [searchTerm, setSearchTerm] = useState('');
     const { isAuthenticated, logout } = useContext(AuthContext);
     const navigate = useNavigate();
 
@@ -153,15 +154,44 @@ const Dashboard = () => {
         }
     };
 
+    const handleDownload = async (filename) => {
+        try {
+            const response = await axios.get(`http://localhost:3000/api/uploads/${filename}`, {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                },
+                responseType: 'blob'  // Set the response type to 'blob' for file download
+            });
+
+            const downloadUrl = URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement('a');
+            link.href = downloadUrl;
+            link.setAttribute('download', filename);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        } catch (error) {
+            console.error('File download error', error);
+            if (error.response) {
+                alert(`File download error: ${error.response.data.error}`);
+            } else if (error.request) {
+                alert('File download error: No response from server');
+            } else {
+                alert(`File download error: ${error.message}`);
+            }
+        }
+    };
+
 
     return (
         <div>
             <h2>Dashboard</h2>
             <input type="file" onChange={handleFileChange} />
             <button onClick={handleUpload}>Upload</button>
+            <input type="text" placeholder="Search files..." onChange={event => setSearchTerm(event.target.value)} />
             <h3>Your files:</h3>
             <ul>
-                {files.map(file => (
+                {files.filter(file => file.originalname.toLowerCase().includes(searchTerm.toLowerCase())).map(file => (
                     <li key={file.filename}>
                         {file.originalname}
                         <button onClick={() => handleDelete(file.filename)}>Delete</button>
@@ -172,6 +202,7 @@ const Dashboard = () => {
                                 <button onClick={() => handleUpdate(file.filename)}>Submit Update</button>
                             </div>
                         )}
+                        <button onClick={() => handleDownload(file.filename)}>Download</button>
                     </li>
                 ))}
             </ul>
