@@ -4,6 +4,8 @@ import { AuthProvider } from './AuthContext';
 import Register from './Register';
 import Login from './Login';
 import Dashboard from './Dashboard';
+import Home from "./home/home";
+import Error from "./error/error";
 
 function App() {
     return (
@@ -14,7 +16,8 @@ function App() {
                         <Route path="/register" element={<Register />} />
                         <Route path="/login" element={<Login />} />
                         <Route path="/dashboard" element={<Dashboard />} />
-                        {/* Add other routes here */}
+                        <Route path='/' element={<Home />} />
+                        <Route path='*' element={<Error />} />
                     </Routes>
                 </div>
             </Router>

@@ -1,0 +1,103 @@
+.dashboard {
+    padding: 20px;
+}
+
+.dashboard-heading {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.logout-button {
+    padding: 10px 20px;
+    background-color: #f44336;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.upload-section {
+    display: flex;
+    margin-bottom: 20px;
+}
+
+.file-input {
+    margin-right: 10px;
+}
+
+.upload-button {
+    padding: 10px 20px;
+    background-color: #4caf50;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.search-input {
+    padding: 10px;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.files-heading {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.file-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.file-item {
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 4px;
+}
+
+.file-details {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.file-name {
+    font-size: 16px;
+    margin-right: 10px;
+}
+
+.file-actions {
+    display: flex;
+    align-items: center;
+}
+
+.file-action-button {
+    margin-right: 10px;
+    padding: 6px 12px;
+    background-color: #2196f3;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.file-update-section {
+    display: flex;
+    align-items: center;
+}
+
+.new-filename-input {
+    margin-right: 10px;
+    padding: 6px 10px;
+}
+
+.file-update-button {
+    padding: 6px 10px;
+    background-color: #ffc107;
+    color: #000;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}

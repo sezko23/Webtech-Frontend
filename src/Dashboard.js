@@ -131,6 +131,43 @@ const Dashboard = () => {
         }
     };
 
+    // const handleUpdate = async (oldFilename) => {
+    //     if (!newFilename) {
+    //         alert('Please enter a new filename');
+    //         return;
+    //     }
+    //
+    //     try {
+    //         const response = await axios.put('http://localhost:3000/api/rename', {
+    //             oldFilename: oldFilename,
+    //             newFilename: newFilename
+    //         }, {
+    //             headers: {
+    //                 'Authorization': `Bearer ${localStorage.getItem('token')}`
+    //             }
+    //         });
+    //
+    //         if (response.data) {
+    //             alert('File updated successfully');
+    //             // Reset new filename
+    //             setNewFilename('');
+    //             // Refresh the list of files
+    //             await getFiles();
+    //         } else {
+    //             alert('File update failed');
+    //         }
+    //     } catch (error) {
+    //         console.error('File update error', error);
+    //         if (error.response) {
+    //             alert(`File update error: ${error.response.data.error}`);
+    //         } else if (error.request) {
+    //             alert('File update error: No response from server');
+    //         } else {
+    //             alert(`File update error: ${error.message}`);
+    //         }
+    //     }
+    // };
+
     const handleUpdate = async (oldFilename) => {
         if (!newFilename) {
             alert('Please enter a new filename');
@@ -150,7 +187,7 @@ const Dashboard = () => {
             if (response.data) {
                 alert('File updated successfully');
                 // Reset new filename
-                setNewFilename('');
+                setNewFilename(''); // Clear the new filename value
                 // Refresh the list of files
                 await getFiles();
             } else {
@@ -167,6 +204,7 @@ const Dashboard = () => {
             }
         }
     };
+
 
     const handleDownload = async (filename) => {
         try {
@@ -198,26 +236,36 @@ const Dashboard = () => {
 
 
     return (
-        <div>
-            <h2>Dashboard</h2>
-            <button onClick={handleLogoutClick}>Logout</button>
-            <input type="file" onChange={handleFileChange} />
-            <button onClick={handleUpload}>Upload</button>
-            <input type="text" placeholder="Search files..." onChange={event => setSearchTerm(event.target.value)} />
-            <h3>Your files:</h3>
-            <ul>
+        <div className="dashboard">
+            <h2 className="dashboard-heading">Dashboard</h2>
+            <button className="logout-button" onClick={handleLogoutClick}>Logout</button>
+            <div className="upload-section">
+                <input type="file" className="file-input" onChange={handleFileChange} />
+                <button className="upload-button" onClick={handleUpload}>Upload</button>
+            </div>
+            <input type="text" className="search-input" placeholder="Search files..." onChange={(event) => setSearchTerm(event.target.value)} />
+            <h3 className="files-heading">Your files:</h3>
+            <ul className="file-list">
                 {files.filter(file => file.originalname.toLowerCase().includes(searchTerm.toLowerCase())).map(file => (
-                    <li key={file.filename}>
-                        {file.originalname}
-                        <button onClick={() => handleDelete(file.filename)}>Delete</button>
-                        <button onClick={() => setFileToUpdate(file.filename)}>Update</button>
-                        {fileToUpdate === file.filename && (
-                            <div>
-                                <input type="text" value={newFilename} onChange={(e) => setNewFilename(e.target.value)} />
-                                <button onClick={() => handleUpdate(file.filename)}>Submit Update</button>
+                    <li key={file.filename} className="file-item">
+                        <div className="file-details">
+                            <span className="file-name">{file.originalname}</span>
+                            <div className="file-actions">
+                                <button className="file-action-button" onClick={() => handleDelete(file.filename)}>Delete</button>
+                                <button className="file-action-button" onClick={() => setFileToUpdate(file.filename)}>Update</button>
+                                {fileToUpdate === file.filename && (
+                                    <div className="file-update-section">
+                                        <input
+                                            type="text"
+                                            className="new-filename-input"
+                                            value={newFilename}
+                                            onChange={(e) => setNewFilename(e.target.value)}
+                                        />                                        <button className="file-update-button" onClick={() => handleUpdate(file.filename)}>Submit Update</button>
+                                    </div>
+                                )}
+                                <button className="file-action-button" onClick={() => handleDownload(file.filename)}>Download</button>
                             </div>
-                        )}
-                        <button onClick={() => handleDownload(file.filename)}>Download</button>
+                        </div>
                     </li>
                 ))}
             </ul>

@@ -2,20 +2,39 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-
 const Register = () => {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-    const [error, setError] = useState(null);
+    const [errorMessage, setErrorMessage] = useState('');
+    const [successMessage, setSuccessMessage] = useState('');
     const navigate = useNavigate();
 
-    const handleSubmit = async (event) => {
-        event.preventDefault();
+    const handleRegisterClick = async () => {
+        const emailValidator = /^[^@]+@[^@]+\.[^.]+$/;
+
+        if (username.length < 3) {
+            setErrorMessage('Username must be at least 3 symbols!');
+            setSuccessMessage('');
+            return;
+        }
+
+        if (!email.match(emailValidator)) {
+            setErrorMessage('Invalid email!');
+            setSuccessMessage('');
+            return;
+        }
+
+        if (password.length < 8) {
+            setErrorMessage('Password must be at least 8 symbols!');
+            setSuccessMessage('');
+            return;
+        }
 
         if (password !== confirmPassword) {
-            alert("Passwords don't match");
+            setErrorMessage('Passwords do not match');
+            setSuccessMessage('');
             return;
         }
 
@@ -24,30 +43,31 @@ const Register = () => {
                 username,
                 email,
                 password,
+                confirm_password: confirmPassword,
             });
 
-            if (response.data) {
-                alert(response.data.message);
-                navigate('/login');
+            if (response.data.message) {
+                setSuccessMessage(response.data.message);
+                setErrorMessage('');
+
+                setTimeout(() => {
+                    navigate('/login');
+                }, 2000);
             } else {
-                alert('Registration failed');
+                setErrorMessage('Registration failed');
             }
         } catch (error) {
             console.error('Registration error', error);
             if (error.response) {
-                // The request was made and the server responded with a status code
-                // that falls out of the range of 2xx
-                console.error(error.response.data);
-                console.error(error.response.status);
-                console.error(error.response.headers);
+                console.error('Registration error response', error.response);
+                console.error('Registration error data', error.response.data);
+                console.error('Registration error status', error.response.status);
                 alert(`Registration error: ${error.response.data.error}`);
             } else if (error.request) {
-                // The request was made but no response was received
-                console.error(error.request);
+                console.error('Registration error request', error.request);
                 alert('Registration error: No response from server');
             } else {
-                // Something happened in setting up the request that triggered an Error
-                console.error('Error', error.message);
+                console.error('Registration error message', error.message);
                 alert(`Registration error: ${error.message}`);
             }
         }
@@ -55,28 +75,75 @@ const Register = () => {
 
 
     return (
-        <div>
-            <h2>Register</h2>
-            <form onSubmit={handleSubmit}>
-                <label>
-                    Username:
-                    <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} required />
+        <div className="main-page">
+            <div className="user-input">
+                <label htmlFor="username">
+                    <img src="https://imageshack.com/i/pmoR8X3cp" alt="User Icon" className="user-icon" />
+                    <div className="line"></div>
+                    <input
+                        type="text"
+                        id="username"
+                        name="username"
+                        placeholder="Username"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                    />
                 </label>
-                <label>
-                    Email:
-                    <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+            </div>
+            <div className="user-input">
+                <label htmlFor="email">
+                    <img src="https://imageshack.com/i/po92oMvKp" alt="User Icon" className="user-icon" />
+                    <div className="line"></div>
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        placeholder="Email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                    />
                 </label>
-                <label>
-                    Password:
-                    <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+            </div>
+            <div className="password-input">
+                <label htmlFor="password">
+                    <img src="https://imageshack.com/i/potCzWpwp" alt="Lock Icon" className="lock-icon" />
+                    <div className="line"></div>
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                    />
                 </label>
-                <label>
-                    Confirm Password:
-                    <input type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required />
+            </div>
+            <div className="password-input">
+                <label htmlFor="confirm-password">
+                    <img src="https://imageshack.com/i/potCzWpwp" alt="Lock Icon" className="lock-icon" />
+                    <div className="line"></div>
+                    <input
+                        type="password"
+                        id="confirm-password"
+                        name="confirm-password"
+                        placeholder="Confirm Password"
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                    />
                 </label>
-                {error && <p>{error}</p>}
-                <button type="submit">Register</button>
-            </form>
+            </div>
+
+            {errorMessage && <p className="error-message">{errorMessage}</p>}
+            {successMessage && <p className="success-message">{successMessage}</p>}
+
+            <button type="button" className="sign-in" onClick={handleRegisterClick}>
+                REGISTER
+            </button>
+            <br />
+            <div className="line-horizontal"></div>
+            <button type="button" onClick={() => navigate('/login')} className="sign-up">
+                BACK
+            </button>
         </div>
     );
 };

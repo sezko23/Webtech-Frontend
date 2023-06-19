@@ -6,8 +6,8 @@ import { AuthContext } from './AuthContext';
 const Login = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const { login } = useContext(AuthContext);
     const navigate = useNavigate();
+    const { login } = useContext(AuthContext);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -37,22 +37,49 @@ const Login = () => {
     };
 
     return (
-        <div>
-            <h2>Login</h2>
-            <form onSubmit={handleSubmit}>
-                <label>
-                    Username:
-                    <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} required />
+        <div className="main-page">
+            <div className="user-input">
+                <label htmlFor="username">
+                    <img src="https://imageshack.com/i/pmoR8X3cp" alt="User Icon" className="user-icon" />
+                    <div className="line"></div>
+                    <input
+                        type="username"
+                        id="username"
+                        name="username"
+                        placeholder="Username"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                        required
+                    />
                 </label>
-                <label>
-                    Password:
-                    <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+            </div>
+            <div className="password-input">
+                <label htmlFor="password">
+                    <img src="https://imageshack.com/i/potCzWpwp" alt="Lock Icon" className="lock-icon" />
+                    <div className="line"></div>
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                    />
                 </label>
-                <button type="submit">Login</button>
-            </form>
+            </div>
+
+            <button type="submit" className="sign-in" onClick={handleSubmit}>
+                LOG IN
+            </button>
+            <br />
+            <div className="line-horizontal"></div>
+            <p id="no-account">Don't have an account?</p>
+            <button type="button" onClick={() => navigate('/register')} className="sign-up">
+                SIGN UP
+            </button>
         </div>
     );
 };
 
 export default Login;
-
