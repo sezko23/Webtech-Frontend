@@ -9,7 +9,7 @@ const Dashboard = () => {
     const [fileToUpdate, setFileToUpdate] = useState(null);
     const [newFilename, setNewFilename] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
-    const { isAuthenticated, logout: authLogout } = useContext(AuthContext);  // rename logout to authLogout
+    const { isAuthenticated, logout: authLogout } = useContext(AuthContext);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -25,10 +25,8 @@ const Dashboard = () => {
     };
 
     const performLogout = () => {
-        // Use the context's logout function
         authLogout();
 
-        // Navigate back to the login page
         navigate('/login');
     };
 
@@ -84,7 +82,6 @@ const Dashboard = () => {
 
             if (response.data) {
                 alert('File uploaded successfully');
-                // Refresh the list of files
                 getFiles();
             } else {
                 alert('File upload failed');
@@ -114,7 +111,6 @@ const Dashboard = () => {
 
             if (response.data) {
                 alert('File deleted successfully');
-                // Refresh the list of files
                 getFiles();
             } else {
                 alert('File delete failed');
@@ -131,42 +127,6 @@ const Dashboard = () => {
         }
     };
 
-    // const handleUpdate = async (oldFilename) => {
-    //     if (!newFilename) {
-    //         alert('Please enter a new filename');
-    //         return;
-    //     }
-    //
-    //     try {
-    //         const response = await axios.put('http://localhost:3000/api/rename', {
-    //             oldFilename: oldFilename,
-    //             newFilename: newFilename
-    //         }, {
-    //             headers: {
-    //                 'Authorization': `Bearer ${localStorage.getItem('token')}`
-    //             }
-    //         });
-    //
-    //         if (response.data) {
-    //             alert('File updated successfully');
-    //             // Reset new filename
-    //             setNewFilename('');
-    //             // Refresh the list of files
-    //             await getFiles();
-    //         } else {
-    //             alert('File update failed');
-    //         }
-    //     } catch (error) {
-    //         console.error('File update error', error);
-    //         if (error.response) {
-    //             alert(`File update error: ${error.response.data.error}`);
-    //         } else if (error.request) {
-    //             alert('File update error: No response from server');
-    //         } else {
-    //             alert(`File update error: ${error.message}`);
-    //         }
-    //     }
-    // };
 
     const handleUpdate = async (oldFilename) => {
         if (!newFilename) {
@@ -186,9 +146,7 @@ const Dashboard = () => {
 
             if (response.data) {
                 alert('File updated successfully');
-                // Reset new filename
-                setNewFilename(''); // Clear the new filename value
-                // Refresh the list of files
+                setNewFilename('');
                 await getFiles();
             } else {
                 alert('File update failed');
@@ -212,7 +170,7 @@ const Dashboard = () => {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
                 },
-                responseType: 'blob'  // Set the response type to 'blob' for file download
+                responseType: 'blob'
             });
 
             const downloadUrl = URL.createObjectURL(new Blob([response.data]));
