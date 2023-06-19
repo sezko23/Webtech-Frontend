@@ -9,7 +9,7 @@ const Dashboard = () => {
     const [fileToUpdate, setFileToUpdate] = useState(null);
     const [newFilename, setNewFilename] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
-    const { isAuthenticated, logout } = useContext(AuthContext);
+    const { isAuthenticated, logout: authLogout } = useContext(AuthContext);  // rename logout to authLogout
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -17,6 +17,20 @@ const Dashboard = () => {
             navigate('/login');
         }
     }, [isAuthenticated, navigate]);
+
+    const handleLogoutClick = () => {
+        if (window.confirm('Are you sure you want to log out?')) {
+            performLogout();
+        }
+    };
+
+    const performLogout = () => {
+        // Use the context's logout function
+        authLogout();
+
+        // Navigate back to the login page
+        navigate('/login');
+    };
 
     const getFiles = async () => {
         try {
@@ -186,6 +200,7 @@ const Dashboard = () => {
     return (
         <div>
             <h2>Dashboard</h2>
+            <button onClick={handleLogoutClick}>Logout</button>
             <input type="file" onChange={handleFileChange} />
             <button onClick={handleUpload}>Upload</button>
             <input type="text" placeholder="Search files..." onChange={event => setSearchTerm(event.target.value)} />
